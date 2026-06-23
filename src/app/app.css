@@ -1,0 +1,57 @@
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.nav-actions a {
+  border-radius: 999px;
+}
+
+.nav-actions a.active-link {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.page-body {
+  padding: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .app-toolbar {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .brand {
+    font-size: 0.95rem;
+  }
+
+  .nav-actions {
+    gap: 0.15rem;
+  }
+
+  .nav-actions a {
+    min-width: 0;
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+    font-size: 0.8rem;
+  }
+}

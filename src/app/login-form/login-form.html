@@ -1,0 +1,76 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Login</h2>
+    <p class="login-subtitle">Sign in to continue.</p>
+
+    <form (submit)="onSubmit($event)" class="login-form">
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          [formField]="loginForm.email"
+          class="form-input"
+          placeholder="Enter your email"
+        />
+        @if (loginForm.email().touched() && loginForm.email().invalid()) {
+          <div class="error-container">
+            @for (error of loginForm.email().errors(); track error.message) {
+              <p class="error-message">{{ error.message }}</p>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="password-field">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            [formField]="loginForm.password"
+            class="form-input"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          >
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (loginForm.password().touched() && loginForm.password().invalid()) {
+          <div class="error-container">
+            @for (error of loginForm.password().errors(); track error.message) {
+              <p class="error-message">{{ error.message }}</p>
+            }
+          </div>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm().invalid() || isSubmitting()"
+        class="submit-button"
+      >
+        @if (isSubmitting()) {
+          Logging in...
+        } @else {
+          Log In
+        }
+      </button>
+
+      @if (apiError()) {
+        <p class="api-message api-message-error" aria-live="polite">{{ apiError() }}</p>
+      }
+
+      @if (loginToken()) {
+        <p class="api-message api-message-success" aria-live="polite">
+          Login successful. Token: {{ loginToken() }}
+        </p>
+      }
+    </form>
+  </div>
+</div>
