@@ -1,0 +1,171 @@
+<section class="crud-page">
+	<div class="crud-layout">
+		<mat-card class="card form-card">
+			<mat-card-header>
+				<mat-card-title>CRUD Operations</mat-card-title>
+				<mat-card-subtitle>Create, edit, and delete records stored in localStorage.</mat-card-subtitle>
+			</mat-card-header>
+
+			<mat-card-content>
+				<form (submit)="onSubmit($event)" class="crud-form">
+					<mat-form-field appearance="outline" class="full-width">
+						<mat-label>Name</mat-label>
+						<input
+							matInput
+							id="name"
+							type="text"
+							[value]="formModel().name"
+							(input)="updateField('name', nameInput.value)"
+							#nameInput
+							placeholder="Enter name"
+						/>
+						@if (formErrors().name) {
+							<mat-error>{{ formErrors().name }}</mat-error>
+						}
+					</mat-form-field>
+
+					<mat-form-field appearance="outline" class="full-width">
+						<mat-label>Email</mat-label>
+						<input
+							matInput
+							id="email"
+							type="email"
+							[value]="formModel().email"
+							(input)="updateField('email', emailInput.value)"
+							#emailInput
+							placeholder="Enter email"
+						/>
+						@if (formErrors().email) {
+							<mat-error>{{ formErrors().email }}</mat-error>
+						}
+					</mat-form-field>
+
+					<mat-form-field appearance="outline" class="full-width">
+						<mat-label>Role</mat-label>
+						<input
+							matInput
+							id="role"
+							type="text"
+							[value]="formModel().role"
+							(input)="updateField('role', roleInput.value)"
+							#roleInput
+							placeholder="Enter role"
+						/>
+						@if (formErrors().role) {
+							<mat-error>{{ formErrors().role }}</mat-error>
+						}
+					</mat-form-field>
+
+					<mat-form-field appearance="outline" class="full-width">
+						<mat-label>Gender</mat-label>
+						<mat-select [value]="formModel().gender" (selectionChange)="updateField('gender', $event.value)">
+							@for (gender of genderOptions; track gender) {
+								<mat-option [value]="gender">{{ gender }}</mat-option>
+							}
+						</mat-select>
+						@if (formErrors().gender) {
+							<mat-error>{{ formErrors().gender }}</mat-error>
+						}
+					</mat-form-field>
+
+					<div class="education-group">
+						<p class="group-label">Education</p>
+						<div class="education-options">
+							@for (education of educationOptions; track education) {
+								<mat-checkbox
+									[checked]="formModel().education.includes(education)"
+									(change)="toggleEducation(education, $event.checked)"
+								>
+									{{ education }}
+								</mat-checkbox>
+							}
+						</div>
+						@if (formErrors().education) {
+							<p class="group-error">{{ formErrors().education }}</p>
+						}
+					</div>
+
+					<div class="actions-row">
+						<button mat-flat-button color="primary" type="submit">
+							<mat-icon>save</mat-icon>
+							@if (editingId()) {
+								Update Record
+							} @else {
+								Add Record
+							}
+						</button>
+
+						@if (editingId()) {
+							<button mat-stroked-button type="button" (click)="cancelEdit()">
+								<mat-icon>close</mat-icon>
+								Cancel
+							</button>
+						}
+					</div>
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<mat-card class="card list-card">
+			<mat-card-header class="list-header">
+				<div>
+					<mat-card-title>Stored Records</mat-card-title>
+					<mat-card-subtitle>{{ items().length }} records in local storage</mat-card-subtitle>
+				</div>
+				<button mat-flat-button color="warn" type="button" (click)="clearAll()" [disabled]="items().length === 0">
+					<mat-icon>delete_sweep</mat-icon>
+					Clear All
+				</button>
+			</mat-card-header>
+
+			<mat-card-content>
+				@if (items().length === 0) {
+					<p class="empty-state">No records yet. Add your first record from the form.</p>
+				} @else {
+					<cdk-virtual-scroll-viewport
+						class="record-viewport"
+						[itemSize]="recordItemSize"
+						[style.height.px]="viewportHeight()"
+					>
+						<div
+							*cdkVirtualFor="let item of items(); trackBy: trackByItemId"
+							class="record-item"
+							[class.editing]="isEditing(item.id)"
+						>
+								<div class="record-content">
+									<p class="record-name">{{ item.name }}</p>
+									<p>
+										<mat-icon class="inline-icon">mail</mat-icon>
+										{{ item.email }}
+									</p>
+									<p>
+										<mat-icon class="inline-icon">badge</mat-icon>
+										{{ item.role }}
+									</p>
+									<p>
+										<mat-icon class="inline-icon">person</mat-icon>
+										{{ item.gender }}
+									</p>
+									<p>
+										<mat-icon class="inline-icon">school</mat-icon>
+										{{ item.education.join(', ') }}
+									</p>
+								</div>
+
+								<div class="record-actions">
+									<button mat-stroked-button type="button" (click)="startEdit(item)">
+										<mat-icon>edit</mat-icon>
+										Edit
+									</button>
+									<button mat-flat-button color="warn" type="button" (click)="deleteItem(item.id)">
+										<mat-icon>delete</mat-icon>
+										Delete
+									</button>
+								</div>
+						</div>
+					</cdk-virtual-scroll-viewport>
+				}
+			</mat-card-content>
+		</mat-card>
+	</div>
+</section>

@@ -1,0 +1,11 @@
+@if (isLoading()) {
+    <p>Loading...</p>
+}
+<h2>{{title()}}</h2>
+<br>
+<p>Signal Count : {{count()}}</p>
+
+@for (item of users(); track $index) {
+    <li>{{item}}</li>
+}
+

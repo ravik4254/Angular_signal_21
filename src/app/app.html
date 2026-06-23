@@ -1,2 +1,22 @@
-<h1>Welcome to My App</h1>
+<mat-toolbar color="primary" class="app-toolbar">
+  <span class="brand">
+    <mat-icon>dashboard</mat-icon>
+    CRUD-OPERATION
+  </span>
+
+  <span class="spacer"></span>
+
+  <div class="nav-actions" aria-label="Main navigation">
+    @if (isAuthenticated()) {
+      <a mat-button routerLink="/crud">CRUD</a>
+      <a mat-button routerLink="/signal-form">Signal Form</a>
+      <button mat-button type="button" (click)="logout()">Logout</button>
+    } @else {
+      <a mat-button routerLink="/login">Login</a>
+    }
+  </div>
+</mat-toolbar>
+
+<div class="page-body">
 <router-outlet></router-outlet>
+</div>
